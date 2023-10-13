@@ -35,5 +35,37 @@ namespace ONG.Tests.UnitTest.Services
             //Assert
             Assert.True(result);
         }
+
+        [Fact]
+        public async Task Authenticate_UserIsValid_ReturnToken()
+        {
+            //Arrange
+            var email = "fribeiro@gmail.com";
+            var password = "12345";
+            var domain = UserModelFixture.GetUserDomain();
+            _mockUserRepository.Setup(x => x.GetByEmail(email)).ReturnsAsync(domain);
+            var service = new UserService(_mockUserRepository.Object);
+
+            //Act
+            var result = await service.Authenticate(email, password);
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task GetAllUser_UsersDtos_ReturnAllUsers()
+        {
+            //Arrange
+            var dto = UserModelFixture.GetUserDTOs();
+            _mockUserRepository.Setup(x => x.ListAsync()).ReturnsAsync(dto);
+            var service = new UserService(_mockUserRepository.Object);
+
+            //Act
+            var result = await service.ListAsync();
+
+            //Asert
+            Assert.NotEmpty(result);
+        }
     }
 }

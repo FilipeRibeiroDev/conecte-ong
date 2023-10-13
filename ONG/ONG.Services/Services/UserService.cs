@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Domain.Model;
+using ONG.Domain.DTOs;
 using ONG.Domain.Interfaces.Services;
 using ONG.Domain.Seedwork;
 using System;
@@ -32,6 +33,34 @@ namespace ONG.Services.Services
             _repository.Add(domain);
 
             return true;
+        }
+
+        public async Task<dynamic> Authenticate(string email, string password)
+        {
+            var existingUser = await _repository.GetByEmail(email);
+            if(existingUser == null)
+            {
+                AddNotification($"Usuário {email} não encontrado.");
+                return null;
+            }
+
+
+            var passwordIsValid = existingUser.PasswordIsValid(password);
+            if (!passwordIsValid)
+            {
+                AddNotification($"Usuário ou Senha inválidos.");
+                return null;
+            }
+
+            return new
+            {
+                Token = "Chorei"
+            };
+        }
+
+        public async Task<List<UserDTO>> ListAsync()
+        {
+            return await _repository.ListAsync();
         }
     }
 }

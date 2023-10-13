@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Seedwork;
+using ONG.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Domain.Interfaces.Repositories
         User Add(User user);
         Task<User?> GetAsync(int userId);
         Task<User?> GetByEmail(string email);
+        Task<List<UserDTO>> ListAsync();
         void Update(User user);
     }
 }
